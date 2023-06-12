@@ -163,6 +163,7 @@ module "aks" {
   client_id                                = var.client_id
   client_secret                            = var.client_secret
   aks_private_cluster                      = var.cluster_api_mode == "private" ? true : false
+  private_dns_zone_id                      = data.azurerm_private_dns_zone.pdns_aks.id 
   depends_on                               = [module.vnet]
 }
 

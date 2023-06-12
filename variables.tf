@@ -743,3 +743,26 @@ variable "aks_identity" {
     error_message = "ERROR: Supported values for `aks_identity` are: uai, sp."
   }
 }
+
+# -----------------------------------------------------------------------------------
+# new variables introduced
+# -----------------------------------------------------------------------------------
+variable "sas_viya_admin_group_name" {
+  description = "The ID of the Tenant to which the subscription belongs"
+  type        = string
+}
+
+variable "cloud_admin_group" {
+  description = "The ID of the Tenant to which the subscription belongs"
+  type        = string
+}
+
+variable "private_dns_zone_name" {
+  description = "The name which should be used for this PostgreSQL Flexible Server. Changing this forces a new PostgreSQL Flexible Server to be created."
+  type        = string
+}
+
+variable "server_name" {
+  description = "The name which should be used for this PostgreSQL Flexible Server. Changing this forces a new PostgreSQL Flexible Server to be created."
+  type        = string
+}

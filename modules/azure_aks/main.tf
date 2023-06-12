@@ -1,6 +1,23 @@
 # Copyright © 2020-2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+# Create new custom pdn
+#resource "azurerm_private_dns_zone" "pdns_aks" {
+#  count = var.aks_private_cluster == "private" ? 1 : 0
+#
+#  name                = "${var.server_name}.privatelink.canadacentral.azmk8s.io"
+#  resource_group_name = var.resource_group_name
+#}
+
+#resource "azurerm_private_dns_zone_virtual_network_link" "pdns_aks" {
+#  count = var.aks_private_cluster == "private" ? 1 : 0
+#
+#  name                  = var.server_name
+#  private_dns_zone_name = azurerm_private_dns_zone.pdns_aks[0].name
+#  virtual_network_id    = var.virtual_network_id
+#  resource_group_name   = var.resource_group_name
+#}
+
 # Reference: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster
 resource "azurerm_kubernetes_cluster" "aks" {
   name                               = var.aks_cluster_name
@@ -16,7 +33,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
   kubernetes_version                 = var.kubernetes_version
   api_server_authorized_ip_ranges    = var.aks_cluster_endpoint_public_access_cidrs
   private_cluster_enabled            = var.aks_private_cluster
-  private_dns_zone_id                = var.aks_private_cluster ? "System" : null
+  #private_dns_zone_id                = var.aks_private_cluster ? "System" : null                               #use system generated pdns
+  #private_dns_zone_id                = var.aks_private_cluster ? azurerm_private_dns_zone.pdns_aks.id : null   #use new custom pdns
+  private_dns_zone_id = var.private_dns_zone_id                                                                 #use pre-existing pdns
 
   network_profile {
     network_plugin = var.aks_network_plugin
