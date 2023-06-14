@@ -7,22 +7,6 @@
 
 ## https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server
 
-resource "azurerm_private_dns_zone" "flexpsql" {
-  count = var.connectivity_method == "private" ? 1 : 0
-
-  name                = "${var.server_name}.postgres.database.azure.com"
-  resource_group_name = var.resource_group_name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "flexpsql" {
-  count = var.connectivity_method == "private" ? 1 : 0
-
-  name                  = var.server_name
-  private_dns_zone_name = azurerm_private_dns_zone.flexpsql[0].name
-  virtual_network_id    = var.virtual_network_id
-  resource_group_name   = var.resource_group_name
-}
-
 resource "azurerm_postgresql_flexible_server" "flexpsql" {
   name                         = "${var.server_name}-flexpsql"
   location                     = var.location
@@ -36,9 +20,10 @@ resource "azurerm_postgresql_flexible_server" "flexpsql" {
   version                      = var.server_version
   tags                         = var.tags
   delegated_subnet_id          = var.delegated_subnet_id
-  private_dns_zone_id          = try(azurerm_private_dns_zone.flexpsql[0].id, null)
+  private_dns_zone_id          = var.private_dns_zone_id
+  #private_dns_zone_id          = try(azurerm_private_dns_zone.flexpsql[0].id, null)
 
-  depends_on = [azurerm_private_dns_zone_virtual_network_link.flexpsql]
+  #depends_on = [azurerm_private_dns_zone_virtual_network_link.flexpsql]
 
   lifecycle {
     ignore_changes = [
