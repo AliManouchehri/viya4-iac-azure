@@ -224,8 +224,16 @@ variable "cluster_egress_type" {
   default     = "loadBalancer"
 }
 
+# New variables introduced
 variable "private_dns_zone_id" {
   description = "The ID of the private DNS zone to create the PostgreSQL Flexible Server. Changing this forces a new PostgreSQL Flexible Server to be created."
   type        = string
   default     = null
 }
+
+variable "authorized_ip_ranges" {
+  description = "The ID of the private DNS zone to create the PostgreSQL Flexible Server. Changing this forces a new PostgreSQL Flexible Server to be created."
+  type        = string
+  default     = null
+}
+
