@@ -71,6 +71,7 @@ variable "tags" {
   type        = map(any)
 }
 
+# Custom naming
 variable "netapp_account_name" {
   description = "Azure NetApp Files account or Resource name"
   type        = string

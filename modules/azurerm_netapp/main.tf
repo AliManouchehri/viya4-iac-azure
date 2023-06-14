@@ -13,14 +13,14 @@
 # }
 
 resource "azurerm_netapp_account" "anf" {
-  name                = "${var.prefix}-${var.netapp_account_name}"
+  name                = "${var.prefix}-${var.netapp_account_name}" # Custom naming
   location            = var.location
   resource_group_name = var.resource_group_name
   tags                = var.tags
 }
 
 resource "azurerm_netapp_pool" "anf" {
-  name                = "${var.prefix}-${var.netapp_account_name}-${var.service_level}"
+  name                = "${var.prefix}-${var.netapp_account_name}-${var.service_level}"  # Custom naming
   location            = var.location
   resource_group_name = var.resource_group_name
   account_name        = azurerm_netapp_account.anf.name
@@ -30,7 +30,7 @@ resource "azurerm_netapp_pool" "anf" {
 }
 
 resource "azurerm_netapp_volume" "anf" {
-  name                = "${var.prefix}-${var.netapp_account_name}-${var.service_level}-${var.netapp_volume_name}"
+  name                = "${var.prefix}-${var.netapp_account_name}-${var.service_level}-${var.netapp_volume_name}" # Custom naming
   location            = var.location
   resource_group_name = var.resource_group_name
   account_name        = azurerm_netapp_account.anf.name
