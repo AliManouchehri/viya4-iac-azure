@@ -1,23 +1,6 @@
 # Copyright © 2020-2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved.
 # SPDX-License-Identifier: Apache-2.0
 
-# Create new custom pdn
-#resource "azurerm_private_dns_zone" "pdns_aks" {
-#  count = var.aks_private_cluster == "private" ? 1 : 0
-#
-#  name                = "${var.server_name}.privatelink.canadacentral.azmk8s.io"
-#  resource_group_name = var.resource_group_name
-#}
-
-#resource "azurerm_private_dns_zone_virtual_network_link" "pdns_aks" {
-#  count = var.aks_private_cluster == "private" ? 1 : 0
-#
-#  name                  = var.server_name
-#  private_dns_zone_name = azurerm_private_dns_zone.pdns_aks[0].name
-#  virtual_network_id    = var.virtual_network_id
-#  resource_group_name   = var.resource_group_name
-#}
-
 # Reference: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster
 resource "azurerm_kubernetes_cluster" "aks" {
   name                               = var.aks_cluster_name
@@ -31,7 +14,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   # https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions
   # az aks get-versions --location eastus -o table
   kubernetes_version                 = var.kubernetes_version
-  api_server_authorized_ip_ranges    = var.aks_cluster_endpoint_public_access_cidrs
+  #api_server_authorized_ip_ranges    = var.aks_cluster_endpoint_public_access_cidrs
   private_cluster_enabled            = var.aks_private_cluster
   #private_dns_zone_id                = var.aks_private_cluster ? "System" : null                               #use system generated pdns
   #private_dns_zone_id                = var.aks_private_cluster ? azurerm_private_dns_zone.pdns_aks.id : null   #use new custom pdns
@@ -52,7 +35,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     service_cidr       = var.aks_service_cidr
     dns_service_ip     = var.aks_dns_service_ip
     pod_cidr           = var.aks_network_plugin == "kubenet" ? var.aks_pod_cidr : null
-    docker_bridge_cidr = var.aks_docker_bridge_cidr
+    #docker_bridge_cidr = var.aks_docker_bridge_cidr
     outbound_type      = var.cluster_egress_type
     load_balancer_sku  = "standard"
   }
@@ -122,6 +105,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = var.aks_cluster_tags
+
+  api_server_access_profile {
+    authorized_ip_ranges = var.aks_cluster_endpoint_public_access_cidrs
+  }
 
 }
 
