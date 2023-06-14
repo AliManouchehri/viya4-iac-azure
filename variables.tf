@@ -190,17 +190,17 @@ variable "aks_dns_service_ip" {
   }
 }
 
-variable "aks_docker_bridge_cidr" {
-  description = "IP address (in CIDR notation) used as the Docker bridge IP address on nodes. Changing this forces a new resource to be created."
-  type        = string
-  default     = "172.17.0.1/16"
-
-  validation {
-    condition     = var.aks_docker_bridge_cidr != null ? can(cidrnetmask(var.aks_docker_bridge_cidr)) : false
-    error_message = "ERROR: aks_docker_bridge_cidr - value must not be null and must be valid CIDR."
-  }
-
-}
+#variable "aks_docker_bridge_cidr" {
+#  description = "IP address (in CIDR notation) used as the Docker bridge IP address on nodes. Changing this forces a new resource to be created."
+#  type        = string
+#  default     = "172.17.0.1/16"
+#
+#  validation {
+#    condition     = var.aks_docker_bridge_cidr != null ? can(cidrnetmask(var.aks_docker_bridge_cidr)) : false
+#    error_message = "ERROR: aks_docker_bridge_cidr - value must not be null and must be valid CIDR."
+#  }
+#
+#}
 
 variable "aks_pod_cidr" {
   description = "The CIDR to use for pod IP addresses. This field can only be set when network_plugin is set to kubenet. Changing this forces a new resource to be created."
@@ -270,6 +270,7 @@ variable "postgres_server_defaults" {
     ssl_enforcement_enabled      = true
     connectivity_method          = "public"
     postgresql_configurations    = []
+    db_resource_name             = "default-name"       # this variable is used for the naming of the resource
   }
 }
 
@@ -747,22 +748,19 @@ variable "aks_identity" {
 # -----------------------------------------------------------------------------------
 # new variables introduced
 # -----------------------------------------------------------------------------------
-variable "sas_viya_admin_group_name" {
-  description = "The ID of the Tenant to which the subscription belongs"
+# used for nfs
+variable "data_disk_count" {
+  description = "Number of disks for the NFS server."
   type        = string
 }
 
-variable "cloud_admin_group" {
-  description = "The ID of the Tenant to which the subscription belongs"
+# used for anf
+variable "netapp_account_name" {
+  description = "Azure NetApp Files account or Resource name"
   type        = string
 }
 
-variable "private_dns_zone_name" {
-  description = "The name which should be used for this PostgreSQL Flexible Server. Changing this forces a new PostgreSQL Flexible Server to be created."
-  type        = string
-}
-
-variable "server_name" {
-  description = "The name which should be used for this PostgreSQL Flexible Server. Changing this forces a new PostgreSQL Flexible Server to be created."
+variable "netapp_volume_name" {
+  description = "Azure NetApp Files volume name"
   type        = string
 }

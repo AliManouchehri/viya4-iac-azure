@@ -154,7 +154,7 @@ module "aks" {
   aks_network_plugin                       = var.aks_network_plugin
   aks_network_policy                       = var.aks_network_policy
   aks_dns_service_ip                       = var.aks_dns_service_ip
-  aks_docker_bridge_cidr                   = var.aks_docker_bridge_cidr
+  #aks_docker_bridge_cidr                   = var.aks_docker_bridge_cidr
   cluster_egress_type                      = local.cluster_egress_type
   aks_pod_cidr                             = var.aks_pod_cidr
   aks_service_cidr                         = var.aks_service_cidr
@@ -216,7 +216,7 @@ module "flex_postgresql" {
 
   resource_group_name          = local.aks_rg.name
   location                     = var.location
-  server_name                  = lower("${var.prefix}-${each.key}") # suffix '-flexpsql' added in the module
+  server_name                  = lower("${var.prefix}-${each.value.db_resource_name}") # suffix '-flexpsql' added in the module
   sku_name                     = each.value.sku_name
   storage_mb                   = each.value.storage_mb
   backup_retention_days        = each.value.backup_retention_days
@@ -232,6 +232,7 @@ module "flex_postgresql" {
   postgresql_configurations = each.value.ssl_enforcement_enabled ? concat(each.value.postgresql_configurations, local.default_postgres_configuration) : concat(
   each.value.postgresql_configurations, [{ name : "require_secure_transport", value : "OFF" }], local.default_postgres_configuration)
   tags = var.tags
+  private_dns_zone_id          =  data.azurerm_private_dns_zone.flexpsql.id 
 }
 
 module "netapp" {
@@ -239,6 +240,8 @@ module "netapp" {
   count  = var.storage_type == "ha" ? 1 : 0
 
   prefix              = var.prefix
+  netapp_account_name = var.netapp_account_name
+  netapp_volume_name  = var.netapp_volume_name
   resource_group_name = local.aks_rg.name
   location            = var.location
   vnet_name           = module.vnet.name

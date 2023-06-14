@@ -70,3 +70,13 @@ variable "tags" {
   description = "Map of tags to be placed on the Resources"
   type        = map(any)
 }
+
+variable "netapp_account_name" {
+  description = "Azure NetApp Files account or Resource name"
+  type        = string
+}
+
+variable "netapp_volume_name" {
+  description = "Azure NetApp Files volume name"
+  type        = string
+}

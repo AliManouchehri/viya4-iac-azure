@@ -13,14 +13,14 @@
 # }
 
 resource "azurerm_netapp_account" "anf" {
-  name                = "${var.prefix}-netappaccount"
+  name                = "${var.prefix}-${var.netapp_account_name}"
   location            = var.location
   resource_group_name = var.resource_group_name
   tags                = var.tags
 }
 
 resource "azurerm_netapp_pool" "anf" {
-  name                = "${var.prefix}-netapppool"
+  name                = "${var.prefix}-${var.netapp_account_name}-${var.service_level}"
   location            = var.location
   resource_group_name = var.resource_group_name
   account_name        = azurerm_netapp_account.anf.name
@@ -30,12 +30,12 @@ resource "azurerm_netapp_pool" "anf" {
 }
 
 resource "azurerm_netapp_volume" "anf" {
-  name                = "${var.prefix}-netappvolume"
+  name                = "${var.prefix}-${var.netapp_account_name}-${var.service_level}-${var.netapp_volume_name}"
   location            = var.location
   resource_group_name = var.resource_group_name
   account_name        = azurerm_netapp_account.anf.name
   service_level       = var.service_level
-  pool_name           = "${var.prefix}-netapppool"
+  pool_name           = azurerm_netapp_pool.anf.name
   volume_path         = var.volume_path
   subnet_id           = var.subnet_id
   network_features    = var.network_features

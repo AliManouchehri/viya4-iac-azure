@@ -101,7 +101,7 @@ module "nfs" {
   ssh_public_key                 = local.ssh_public_key
   cloud_init                     = data.cloudinit_config.nfs[0].rendered
   create_public_ip               = var.create_nfs_public_ip
-  data_disk_count                = 4
+  data_disk_count                = var.data_disk_count
   data_disk_size                 = var.nfs_raid_disk_size
   data_disk_storage_account_type = var.nfs_raid_disk_type
   data_disk_zone                 = var.nfs_raid_disk_zone
