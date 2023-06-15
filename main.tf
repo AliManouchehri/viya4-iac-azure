@@ -222,7 +222,8 @@ module "flex_postgresql" {
   backup_retention_days        = each.value.backup_retention_days
   geo_redundant_backup_enabled = each.value.geo_redundant_backup_enabled
   administrator_login          = each.value.administrator_login
-  administrator_password       = each.value.administrator_password
+  #administrator_password       = each.value.administrator_password
+  administrator_password       = azurerm_key_vault_secret.secret-postgres-admin-password.value
   server_version               = each.value.server_version
   firewall_rule_prefix         = "${var.prefix}-${each.key}-postgres-firewall-"
   firewall_rules               = local.postgres_firewall_rules
